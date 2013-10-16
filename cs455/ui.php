@@ -11,7 +11,7 @@
 
 <div class = "container">	
 	<h1><a href="#"> Cloud Storage Simplified </a></h1> 
-	<table class = "table table-hover"
+	<table class = "table table-hover">
 		<thead>
 			<tr>
 				<td> Service </td>
@@ -32,7 +32,7 @@
 				<td> Not </td>	
 			</tr>
 		</tbody>
-	</div>
+	</table>
 </div>
 </body>
 </html>
