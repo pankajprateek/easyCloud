@@ -8,61 +8,21 @@
 	      <script src="../../cs455/bootstrap/js/bootstrap.js"></script>
       </head>
       <body>
-
+	
 	<div class = "container">
 
-	      <?php
+		<?php
+			require_once 'Dropbox.class.php';
 
-	      require_once 'Dropbox.class.php';
-
-	      $dropbox = new Dropbox();
-
-	      $userArray = $dropbox->get('https://api.dropbox.com/1/account/info');
-
-	      $try = $dropbox->test('dropbox');
-	      //echo $try;
-
-	      //var_dump($dropbox->getFile('dropbox', 'Codes/dijkstra.cpp'));
-	      //echo "<br>";
-	      $nl = "<br>\n";
-
-	      $arr = $dropbox->getFolder('root', NULL);
-	      //var_dump($arr);
-	      echo $dropbox->getHTML($arr);
-
-	      /*
-	      foreach($arr as $a) {
-		//var_dump($a);
-		echo $nl.$nl;
-		if($a['is_dir'] == 1) {
-		  echo "<a href = ''>".$a['path']." ".$a['is_dir']. "</a>".$nl;
-		} else {
-		  echo $a['path']." ".$a['is_dir']. $nl;
-		}
-		
-	      }
-	      */
-
-	      /*
-	      foreach ($meta as $key => $value) {
-		  echo $key.$nl;
-		  if($key == 'contents') {
-		  
-		  $a = (array)$value['0'];
-		  var_dump($a);
-		  echo $a['path'];
-		  echo $nl;
-		  $array[] = $a['path'];
-		  }
-	      }
-	      */
-
-
-	      //var_dump($meta['contents']);
-
-
-
-	      ?>
+			$dropbox = new Dropbox();
+			$userArray = $dropbox->get('https://api.dropbox.com/1/account/info');
+			$try = $dropbox->test('dropbox');
+			$nl = "<br>\n";
+			$arr = $dropbox->getFolder('root', NULL);
+			echo $nl.$nl;
+			echo $dropbox->getHTML($arr);	     
+			
+		?>
 	</div>
 	<h1>Dropbox API</h1>
 	
