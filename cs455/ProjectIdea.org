@@ -1,0 +1,17 @@
+* Project Title: Distributed cloud storage.
+
+Abstract: Using cloud storage systems such as Dropbox, skydrive, google-drive, etc. to create a central platform for uploading data and fetching it. Having a single account on the central server that automates creation creation of account on various cloud storage sites.
+
+Technologies To be used: Dropbox API, Skydrive API, Google-drive API, python/Android/php/js.
+
+Other objectives: Distributing data in a efficient manner. Allowing cloud storage of more than 100GB and reducing time lag in fetching of data.
+
+The main motive is to develop an abstraction layer for the user which would show him the total space he has available in all his cloud storage accounts. Distributing the files over the accounts would be done by the software (greedy algorithm for the time being). 
+
+---
+
+* Future work:
+
+i) Sync with Desktop.
+ii) The user can put certain files in a particular account. 
+ 
