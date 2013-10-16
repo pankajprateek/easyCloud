@@ -279,9 +279,9 @@ class Dropbox
 		//var_dump($a);
 		//$s .=  $nl;
 		if($a['is_dir'] == 1) {
-		  $s .=  "<tr> <td> <a href = ''>". $a['path'] ."</a> </td> <td>". $a['stored_at'] ."</td> <td>". $a['last_modified'] ."</td> </tr>";
+		  $s .= "<tr> <td> <a href = ''>". $a['path'] ."</a> </td> <td>". $a['stored_at'] ."</td> <td>". $a['last_modified'] ."</td> </tr>";
 		} else { 
-		  $s .=  "<tr> <td>". $a['path'] ."</td> <td>". $a['stored_at'] ."</td> <td>". $a['last_modified'] ."</td> </tr>";
+		  $s .= "<tr> <td>". $a['path'] ."</td> <td>". $a['stored_at'] ."</td> <td>". $a['last_modified'] ."</td> </tr>";
 		}			
 	    }	
 	    
