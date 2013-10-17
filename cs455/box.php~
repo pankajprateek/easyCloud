@@ -28,19 +28,19 @@
 
 		if(!array_key_exists('auth',$_SESSION) || empty($_SESSION['auth'])) {
 		$_SESSION['auth'] = $box_net->authenticate();
-		echo $_SESSION['auth']."<br/>";
+		//echo $_SESSION['auth']."<br/>";
 		}
 		else {
 		// If the auth $_SESSION key exists, then we can say that 
 		// the user is logged in. So we set the auth_token in 
 		// box_net.
 		$box_net->auth_token = $_SESSION['auth'];
-		echo $_SESSION['auth']."<br/>";
+		//echo $_SESSION['auth']."<br/>";
 		} 
-		echo $box_net->auth_token."<br/>";
+		//echo $box_net->auth_token."<br/>";
 		$folder = $box_net->folder(0); 
 		//var_dump($folder->file);
-		echo $nl.$nl;
+		//echo $nl.$nl;
 
 		//var_dump($folder->file);
 		//echo "<br/>";
@@ -50,7 +50,7 @@
 			//var_dump($try);
 			$t = (array)$try;       
 			foreach($t as $k => $v) {
-				var_dump($v);
+				//var_dump($v);
 				if($v['file_name']) {
 					$arr[] = array("path" => $v['file_name'], "is_dir" => $v['is_dir'], "last_modified" => $v["updated"], "stored_at" => "Box.net");
 				}		
@@ -63,7 +63,7 @@
 		}
 
 		echo $nl.$nl;
-		var_dump($arr);
+		//var_dump($arr);
 		$dropbox = new Dropbox();
 		echo $dropbox->getHTML($arr);
 

@@ -21,7 +21,7 @@ class Drive {
 		}
 	}
 
-	public function isAuthenticated() {
+	public static function isAuthenticated() {
 		if (isset($_SESSION['driveId'])) {
 			return true;
 		}	
@@ -30,6 +30,20 @@ class Drive {
 
 	public function getAuthToken() {
 		return $this->client->getAccessToken();
+	}
+	
+	public function getFolder() {
+		$files = $this->service->files->listFiles($parameters);
+		$items = $files["items"];
+
+		$output = array();
+		foreach($items as $i) {
+			//var_dump($i);
+			
+			//echo $i["modifiedDate"]." ".$i["kind"].$nl.$nl;
+			$output[] = array("path" => $i["title"],  "is_dir" => 0, "stored_at" => "Drive", "last_modified" => $i['modifiedDate']);
+		}
+		return $output;
 	}
 }
 ?>

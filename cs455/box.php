@@ -15,7 +15,7 @@
 		<?php session_start();
 		// Include the Box_Rest_Client class
 		include('box-php-sdk-master/lib/Box_Rest_Client.php');
-		require_once '../software/dropbox/Dropbox.class.php';
+		require_once 'Dropbox.class.php';
 							
 		// Set your API Key. If you have a lot of pages reliant on the 
 		// api key, then you should just set it statically in the 
