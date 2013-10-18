@@ -25,7 +25,7 @@ class Box{
 	
 	public function getFolder() {
 		$folder = $this->box_net->folder(0); 
-		var_dump($folder);
+		//var_dump($folder);
 		$arr = array();
 		foreach ($folder->file as $try) {
 			//var_dump($try);

@@ -69,7 +69,7 @@
 				$concatenated_arr[] = $od;
 			}									
 			
-			var_dump($_SESSION);
+			//var_dump($_SESSION);
 			echo $nl.$nl;
 			echo EasyCloud::getHTML($concatenated_arr);
 			
