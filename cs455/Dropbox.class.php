@@ -79,8 +79,8 @@ class Dropbox
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);  
 		curl_setopt($ch, CURLOPT_URL, "https://api.dropbox.com/1/oauth/request_token");  
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);  
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		$request_token_response = curl_exec($ch);
-		
 		//	parse the returned data which has the format:
 		// "oauth_token=<access-token>&oauth_token_secret=<access-token-secret>"
 		parse_str($request_token_response, $parsed_request_token);
@@ -123,7 +123,7 @@ class Dropbox
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);  
 		curl_setopt($ch, CURLOPT_URL, "https://api.dropbox.com/1/oauth/access_token");  
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);  
-		
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		//execute and parse
 		$access_token_response = curl_exec($ch);  
 		parse_str($access_token_response, $parsed_access_token);
@@ -174,6 +174,7 @@ class Dropbox
 		curl_setopt($ch, CURLOPT_URL, $url);  
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		$api_response = curl_exec($ch);
 		return $api_response;
 	}
@@ -198,6 +199,7 @@ class Dropbox
 		curl_setopt($ch, CURLOPT_URL, $url);  
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		$api_response = curl_exec($ch);
 		return json_decode($api_response);
 	}
@@ -313,7 +315,7 @@ class Dropbox
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 		curl_setopt($ch, CURLOPT_INFILE, $fp); // file pointer
 		curl_setopt($ch, CURLOPT_INFILESIZE, strlen($body));  
-		
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		return $api_response = curl_exec($ch);
 	}
 
