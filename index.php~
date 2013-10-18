@@ -1,6 +1,0 @@
-<?php session_start();
-  if(!isset($_SESSION['boxtoken']))
-    echo "<a href='login_box.php'><img src=static/boxgrey.jpeg></a>";
-  else
-    echo "<img src=static/box.jpeg>";
-?>
