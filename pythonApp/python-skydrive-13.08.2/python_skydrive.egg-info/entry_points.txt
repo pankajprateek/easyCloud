@@ -1,0 +1,3 @@
+[console_scripts]
+skydrive-cli = skydrive.cli_tool:main
+

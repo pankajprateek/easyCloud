@@ -1,0 +1,13 @@
+README.txt
+setup.py
+python_skydrive.egg-info/PKG-INFO
+python_skydrive.egg-info/SOURCES.txt
+python_skydrive.egg-info/dependency_links.txt
+python_skydrive.egg-info/entry_points.txt
+python_skydrive.egg-info/requires.txt
+python_skydrive.egg-info/top_level.txt
+skydrive/__init__.py
+skydrive/api_v5.py
+skydrive/cli_tool.py
+skydrive/conf.py
+skydrive/portalocker.py

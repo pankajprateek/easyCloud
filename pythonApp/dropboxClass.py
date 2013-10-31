@@ -53,16 +53,27 @@ class DropboxClass:
 					print '   ',
 				print i['path']
 				'''
-				structure.append(i['path'])
 				if i['is_dir']:
 					display_file_info(i['path'],depth+1)
+				else:
+					structure.append(i['path'])
 		structure = []
 		display_file_info(path,0)
 		return structure
 	
+	def download(self, from_path, to_path):
+		to_file = open(os.path.expanduser(to_path), "wb")
+		f, metadata = self.api_client.get_file_and_metadata(self.current_path + "/" + from_path)
+		print 'Metadata:', metadata
+		to_file.write(f.read())
+		
+	def upload(self, from_path, to_path):
+		from_file = open(os.path.expanduser(from_path), "rb")
+		self.api_client.put_file(self.current_path + "/" + to_path, from_file)
+	
 def main():	
 	drop = DropboxClass()
-	out = drop.display_info('/dropbox-python-sdk-1.6')
+	out = drop.display_info('/easyCloud')
 	for i in out:
 		print i
 	

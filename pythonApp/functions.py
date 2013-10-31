@@ -13,9 +13,10 @@ def get_structure(path,depth):
 	out2=out[1].split('\n')
 	for temp in out2[3:]:
 		temp1 = temp.split()
-		structure.append("".join([path,'/',temp1[8]]))
 		if temp1[0][0]=='d':
 			tmp = get_structure("".join([path,'/',temp1[8]]),depth+1)
+		else:
+			structure.append("".join([path,'/',temp1[8]]))
 	return structure
 			
 def display_structure(path,depth):
@@ -23,7 +24,9 @@ def display_structure(path,depth):
 	for i in temp:
 		print i
 	
-display_structure('.',0)
+#display_structure('~/easyCloud',0)
+#out = get_structure('~/easyCloud',0)
+#print out
 '''
 out = sys_exec("ls -al ~/easyCloud")
 #print out[1]

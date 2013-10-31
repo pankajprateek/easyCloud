@@ -23,7 +23,9 @@ def display_structure(path,depth):
 	for i in temp:
 		print i
 	
-display_structure('.',0)
+#display_structure('~/easyCloud',0)
+#out = get_structure('~/easyCloud',0)
+#print out
 '''
 out = sys_exec("ls -al ~/easyCloud")
 #print out[1]
@@ -35,4 +37,3 @@ for temp in out2[3:]:
 		print "directory",
 	print
 '''
-from dropbox import rest
