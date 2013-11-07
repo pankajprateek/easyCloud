@@ -1,7 +1,12 @@
 #!/usr/bin/python
 
-import httplib2
+import cmd
+import locale
+import os
 import pprint
+import shlex
+import sys
+import httplib2
 
 from apiclient.discovery import build
 from apiclient.http import MediaFileUpload
@@ -11,6 +16,7 @@ from oauth2client.file import Storage
 
 class DriveClass:
 	def __init__(self):
+		self.mapping={}
 		self.TOKEN_FILE = "token_drive.txt"
 		# Copy your credentials from the console
 		self.CLIENT_ID = '278916592295.apps.googleusercontent.com'
@@ -58,7 +64,9 @@ class DriveClass:
 			remove = []
 			prefix = {}
 			prefix2 = {}
+			trashed = []
 			for i in out:
+				self.mapping[i['title']] = i['id']
 				if i['title'] == 'easyCloud':
 					cloud.append(i['parents'][0]['selfLink'][len(i['parents'][0]['selfLink'])-56:len(i['parents'][0]['selfLink'])-28])
 					prefix[i['parents'][0]['selfLink'][len(i['parents'][0]['selfLink'])-56:len(i['parents'][0]['selfLink'])-28]] = '~/easyCloud'
@@ -76,6 +84,8 @@ class DriveClass:
 				for i in out:
 					oldout.append(i)
 				for i in out:
+					if i['labels']['trashed'] == True:
+						continue
 					parentLink = i['parents'][0]['parentLink'][len(i['parents'][0]['parentLink'])-28:]
 					selfLink = i['parents'][0]['selfLink'][len(i['parents'][0]['selfLink'])-65:len(i['parents'][0]['selfLink'])-37]
 					if parentLink in cloud:
@@ -124,22 +134,111 @@ class DriveClass:
 				break
 		return restructure(result)
 	
+	def upload(self):
+		service = self.drive_client
+		file1 = GoogleDriveFile(service, metadata=None)
+		#file1 = self.CreateFile()
+		return
+		
+	def print_mapping(self):
+		for i in self.mapping:
+			print i, self.mapping[i]
+		print
 	
+	def print_file(self, title):
+		service = self.drive_client
+		try:
+			tmp = title.split('/')
+			title = tmp[len(tmp)-1]
+			file_id = self.mapping[title]
+			file = service.files().get(fileId=file_id).execute()
+			print 'Title: %s' % file['title']
+			print 'MIME type: %s' % file['mimeType']
+		except errors.HttpError, error:
+			print 'An error occurred: %s' % error
+			
+			
+	def download(self, title, to_path):
+		service = self.drive_client
+		tmp = title.split('/')
+		title = tmp[len(tmp)-1]
+		file_id = self.mapping[title]
+		file = service.files().get(fileId=file_id).execute()
+		download_url = file.get('downloadUrl')
+		#print download_url
+		if download_url:
+			resp, content = service._http.request(download_url)
+			if resp.status == 200:
+				print 'Status: %s' % resp
+				to_file = open(os.path.expanduser(to_path), "wb")
+				to_file.write(content)
+				#print content
+			else:
+				print 'An error occurred: %s' % resp
+				return None
+		else:
+			return None
+			
+			
+	def upload(self, title):
+		service = self.drive_client
+		tmp = title.split('/')
+		title = '/home/pankaj'+title[1:]
+		parent_id = self.mapping[tmp[len(tmp)-2]]
+		#print parent_id
+		#print title
+		
+		from_file = open(os.path.expanduser(title), "rb")
+		if not from_file.read():
+			print "File Empty "+title
+			return
+		
+		#FILENAME = "document.txt"
+		media_body = MediaFileUpload(title, mimetype='text/plain', resumable=True)
+		body = {
+			'title': tmp[len(tmp)-1],
+			'description': 'A test document',
+			'mimeType': 'text/plain'
+		}
+		body['parents'] = [{'id': parent_id}]
+
+		file = service.files().insert(body=body, media_body=media_body).execute()
+		print "Uploaded "+title
+		#pprint.pprint(file)
+		return
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 '''
+# Copy your credentials from the console
+CLIENT_ID = '278916592295.apps.googleusercontent.com'
+CLIENT_SECRET = 'JjdRNzvxuleTUqrZVzIzWH3M'
+
+# Check https://developers.google.com/drive/scopes for all available scopes
+OAUTH_SCOPE = 'https://www.googleapis.com/auth/drive'
+
+# Redirect URI for installed apps
+REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
+
 # Path to the file to upload
 FILENAME = 'document.txt'
-
-# Run through the OAuth flow and retrieve credentials
-flow = OAuth2WebServerFlow(CLIENT_ID, CLIENT_SECRET, OAUTH_SCOPE, REDIRECT_URI)
-authorize_url = flow.step1_get_authorize_url()
-print 'Go to the following link in your browser: ' + authorize_url
-code = raw_input('Enter verification code: ').strip()
-credentials = flow.step2_exchange(code)
-
-# Create an httplib2.Http object and authorize it with our credentials
+storage = Storage("token_drive.txt")
+credentials = storage.get()
 http = httplib2.Http()
 http = credentials.authorize(http)
-
 drive_service = build('drive', 'v2', http=http)
 
 # Insert a file
@@ -153,7 +252,3 @@ body = {
 file = drive_service.files().insert(body=body, media_body=media_body).execute()
 pprint.pprint(file)
 '''
-
-#drive = DriveClass()
-#out = drive.retrieve_all_files()
-#print out

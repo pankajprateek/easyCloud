@@ -7,7 +7,7 @@ print file_local
 
 drive = DriveClass()
 file_drive = drive.retrieve_all_files()
-print "File Drive:",
+print "File Google Drive:",
 print file_drive
 
 sync_upload = []
@@ -34,6 +34,14 @@ print sync_download
 print "Sync Upload:",
 print sync_upload
 
+
+#drive.print_mapping()
+for i in sync_download:
+	#drive.print_file(i)
+	drive.download(i,i)
+
+for i in sync_upload:
+	drive.upload(i)
 #print 
 #print
 
