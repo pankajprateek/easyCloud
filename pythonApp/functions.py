@@ -8,6 +8,7 @@ def sys_exec(command):
 	#os.system(command)
 	
 structure = []
+size = {}
 def get_structure(path,depth):
 	out = sys_exec("".join(['ls -al ',path]))
 	out2=out[1].split('\n')
@@ -16,14 +17,15 @@ def get_structure(path,depth):
 		if temp1[0][0]=='d':
 			tmp = get_structure("".join([path,'/',temp1[8]]),depth+1)
 		else:
+			size["".join([path,'/',temp1[8]])] = temp1[4]
 			structure.append("".join([path,'/',temp1[8]]))
-	return structure
+	return structure, size
 			
 def display_structure(path,depth):
 	temp = get_structure(path,depth)
 	for i in temp:
 		print i
-	
+		
 #display_structure('~/easyCloud',0)
 #out = get_structure('~/easyCloud',0)
 #print out

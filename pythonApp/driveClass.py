@@ -208,6 +208,19 @@ class DriveClass:
 		return
 
 
+	def get_quota(self):
+		service = self.drive_client
+		try:
+			about = service.about().get().execute()
+
+			#print 'Current user name: %s' % about['name']
+			#print 'Total quota (bytes): %s' % about['quotaBytesTotal']
+			#print 'Used quota (bytes): %s' % about['quotaBytesUsed']
+			return about['quotaBytesTotal'], about['quotaBytesUsed']
+		except errors.HttpError, error:
+			print 'An error occurred: %s' % error
+			return 0
+
 
 
 

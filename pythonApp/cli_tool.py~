@@ -236,7 +236,6 @@ def main():
 
     if optz.call == 'auth':
         if not optz.url:
-            print(optz)
             print('Visit the following URL in any web browser (firefox, chrome, safari, etc),\n'
                   '  authorize there, confirm access permissions, and paste URL of an empty page\n'
                   '  (starting with "https://login.live.com/oauth20_desktop.srf")'

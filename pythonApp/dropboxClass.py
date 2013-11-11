@@ -58,18 +58,27 @@ class DropboxClass:
 				else:
 					structure.append(i['path'])
 		structure = []
+		structure2 = []
 		display_file_info(path,0)
-		return structure
+		for i in structure:
+			structure2.append('~'+i)
+		return structure2
 	
 	def download(self, from_path, to_path):
+		from_path = from_path[2:]
 		to_file = open(os.path.expanduser(to_path), "wb")
 		f, metadata = self.api_client.get_file_and_metadata(self.current_path + "/" + from_path)
 		print 'Metadata:', metadata
 		to_file.write(f.read())
 		
 	def upload(self, from_path, to_path):
+		to_path = to_path[2:]
 		from_file = open(os.path.expanduser(from_path), "rb")
 		self.api_client.put_file(self.current_path + "/" + to_path, from_file)
+		
+	def get_quota(self):
+		f = self.api_client.account_info()
+		return f['quota_info']['quota'], f['quota_info']['normal']+f['quota_info']['shared']
 	
 def main():	
 	drop = DropboxClass()

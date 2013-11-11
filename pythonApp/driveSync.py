@@ -42,6 +42,9 @@ for i in sync_download:
 
 for i in sync_upload:
 	drive.upload(i)
+	
+	
+print drive.get_quota()
 #print 
 #print
 

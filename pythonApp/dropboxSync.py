@@ -16,32 +16,30 @@ sync_download = []
 for i in file_drop:
 	flag = False
 	for j in file_local:
-		if i[10:] == j[11:]:
+		if i == j:
 			flag = True
 	if not flag:
-		sync_download.append(i[10:])
+		sync_download.append(i)
 		
 for i in file_local:
 	flag = False
 	for j in file_drop:
-		if i[11:] == j[10:]:
+		if i == j:
 			flag = True
 	if not flag:
-		sync_upload.append(i[11:])
+		sync_upload.append(i)
 
 print "Sync Download:",
 print sync_download
 print "Sync Upload:",
 print sync_upload
 
-print 
-print
-
 for i in sync_download:
-	print 'easyCloud'+i,
-	drop.download('easyCloud'+i,'~/easyCloud'+i)
+	drop.download(i,i)
 	
 print sync_upload
 for i in sync_upload:
-	print 'easyCloud'+i,
-	drop.upload('~/easyCloud'+i,'easyCloud'+i)
+	drop.upload(i,i)
+	
+	
+print drop.get_quota()
