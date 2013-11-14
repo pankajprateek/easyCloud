@@ -6,6 +6,7 @@ print "File Local:",
 print file_local
 
 drive = DriveClass()
+print drive.login()
 file_drive = drive.retrieve_all_files()
 print "File Google Drive:",
 print file_drive
@@ -44,7 +45,7 @@ for i in sync_upload:
 	drive.upload(i,i)
 	
 	
-print drive.get_quota()
+#print drive.get_quota()
 #print 
 #print
 

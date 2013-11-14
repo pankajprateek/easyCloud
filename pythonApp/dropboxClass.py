@@ -16,30 +16,41 @@ class DropboxClass:
 		self.APP_SECRET = '6uncb4b907gg8bb'
 		self.current_path = ''
 		self.api_client = None
+		self.authenticated = False
+		
+	def login(self):
 		try:
 			token = open(self.TOKEN_FILE).read()
 			self.api_client = client.DropboxClient(token)
-			print "[loaded access token]"
+			self.authenticated = True
+			return "[loaded access token]"
 		except IOError:
 			#pass # don't worry if it's not there
 			#login user if the auth-token is not found
 			"""log in to a Dropbox account"""
-			flow = client.DropboxOAuth2FlowNoRedirect(self.APP_KEY, self.APP_SECRET)
-			authorize_url = flow.start()
-			sys.stdout.write("1. Go to: " + authorize_url + "\n")
-			sys.stdout.write("2. Click \"Allow\" (you might have to log in first).\n")
-			sys.stdout.write("3. Copy the authorization code.\n")
-			code = raw_input("Enter the authorization code here: ").strip()
-			
-			try:
-				access_token, user_id = flow.finish(code)
-			except rest.ErrorResponse, e:
-				self.stdout.write('Error: %s\n' % str(e))
-				return
-			
-			with open(self.TOKEN_FILE, 'w') as f:
-				f.write(access_token)
-			self.api_client = client.DropboxClient(access_token)
+			self.flow = client.DropboxOAuth2FlowNoRedirect(self.APP_KEY, self.APP_SECRET)
+			authorize_url = self.flow.start()
+			return authorize_url
+			#sys.stdout.write("1. Go to: " + authorize_url + "\n")
+			#sys.stdout.write("2. Click \"Allow\" (you might have to log in first).\n")
+			#sys.stdout.write("3. Copy the authorization code.\n")
+	
+	def auth(self, code):
+		#code = raw_input("Enter the authorization code here: ").strip()
+		try:
+			access_token, user_id = self.flow.finish(code)
+		except rest.ErrorResponse, e:
+			self.stdout.write('Error: %s\n' % str(e))
+			return "Error " + str(e)
+		
+		with open(self.TOKEN_FILE, 'w') as f:
+			f.write(access_token)
+		self.api_client = client.DropboxClient(access_token)
+		self.authenticated = True
+		return "[loaded access token]"
+	
+	def isAuthenticated(self):
+		return self.authenticated
 	
 	def display_info(self,path):
 		"""list files in current remote directory or directory specified by path"""

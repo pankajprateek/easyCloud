@@ -102,6 +102,11 @@ class skydriveClass:
 		t=''
 		for i in range(0,len(tmp)-1):
 			t=t+tmp[i]+'/'
+		try:
+			resolve_path(t[2:len(t)-1])
+		except:   #Create folder here
+			print("Parent folder does not exist")
+			return
 		xres = self.api_client.put('/home/pankaj'+title[1:], resolve_path(t[2:len(t)-1]), overwrite=True)
 		if xres:
 			print(location)

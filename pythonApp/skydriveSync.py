@@ -37,3 +37,6 @@ print sync_upload
 
 for i in sync_download:
 	skydrive.download(i,i)
+	
+for i in sync_upload:
+	skydrive.upload(i,i)
