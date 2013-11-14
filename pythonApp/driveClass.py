@@ -192,9 +192,7 @@ class DriveClass:
 		service = self.drive_client
 		tmp = title.split('/')
 		title = '/home/pankaj'+title[1:]
-		print self.mapping
 		if tmp[len(tmp)-2] in self.mapping.keys():
-			print "Hello", tmp[len(tmp)-2]
 			parent_id = self.mapping[tmp[len(tmp)-2]]
 		else:
 			tmpx = []
@@ -233,8 +231,16 @@ class DriveClass:
 		if tmp[len(tmp)-1] in self.mapping.keys():
 			parent_id = self.mapping[tmp[len(tmp)-1]]
 		else:
-			print "Error"
-			return
+			t = path.split('/')
+			n = t[len(t)-1]
+			tmpx = []
+			for i in range(0,len(t)-1):
+				tmpx.append(t[i])
+				tmpx.append('/')
+			x = "".join(tmpx[:len(tmpx)-1])
+			self.create_folder(n,x)
+			parent_id = self.mapping[tmp[len(tmp)-1]]
+			#return
 		body = {
 			'title': name,
 			'parents': [{"id": parent_id}],
@@ -279,4 +285,4 @@ class DriveClass:
 #drive.retrieve_all_files()
 #drive.delete('pic.JPG')
 #drive.delete('pic.JPG')
-#drive.create_folder('try','easyCloud')
+#drive.create_folder('try','easyCloud/hello')
