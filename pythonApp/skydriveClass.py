@@ -37,6 +37,7 @@ class skydriveClass:
 			self.api_client.auth_user_process_url(url)
 			self.api_client.auth_get_token()
 			print('API auth was completed successfully')
+		print("[loaded access token]")
 		
 	def get_quota(self):
 		free, quota = self.api_client.get_quota()
@@ -71,6 +72,7 @@ class skydriveClass:
 		return structure2
 	
 	def download(self, title, location):
+		title = title[2:]
 		def id_match( s,
 						_re_id=re.compile(r'^(file|folder)\.[0-9a-f]{16}\.[0-9A-F]{16}!\d+|folder\.[0-9a-f]{16}$') ):
 			return s if s and _re_id.search(s) else None

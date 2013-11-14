@@ -37,7 +37,6 @@ print sync_upload
 for i in sync_download:
 	drop.download(i,i)
 	
-print sync_upload
 for i in sync_upload:
 	drop.upload(i,i)
 	

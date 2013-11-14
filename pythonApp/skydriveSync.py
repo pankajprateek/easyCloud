@@ -35,5 +35,5 @@ print sync_download
 print "Sync Upload:",
 print sync_upload
 
-for i in sync_upload:
-	skydrive.upload(i,i)
+for i in sync_download:
+	skydrive.download(i,i)
