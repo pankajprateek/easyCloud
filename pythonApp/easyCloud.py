@@ -4,7 +4,7 @@ from dropboxClass import *
 from sets import Set
 
 def getUploadLocation(i):
-	return "dropbox"
+	return "googleDrive"
 
 drive = DriveClass()
 drop = DropboxClass()

@@ -1,7 +1,7 @@
 from driveClass import *
 from functions import *
 
-file_local = get_structure('~/easyCloud',0)
+file_local, b = get_structure('~/easyCloud',0)
 print "File Local:",
 print file_local
 
@@ -41,7 +41,7 @@ for i in sync_download:
 	drive.download(i,i)
 
 for i in sync_upload:
-	drive.upload(i)
+	drive.upload(i,i)
 	
 	
 print drive.get_quota()

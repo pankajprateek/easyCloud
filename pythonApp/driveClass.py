@@ -150,7 +150,11 @@ class DriveClass:
 		try:
 			tmp = title.split('/')
 			title = tmp[len(tmp)-1]
-			file_id = self.mapping[title]
+			if title in self.mapping.keys():
+				file_id = self.mapping[title]
+			else:
+				print "File doesn't exist"
+				return
 			file = service.files().get(fileId=file_id).execute()
 			print 'Title: %s' % file['title']
 			print 'MIME type: %s' % file['mimeType']
@@ -162,7 +166,11 @@ class DriveClass:
 		service = self.drive_client
 		tmp = title.split('/')
 		title = tmp[len(tmp)-1]
-		file_id = self.mapping[title]
+		if title in self.mapping.keys():
+			file_id = self.mapping[title]
+		else:
+			print "File doesn't exist"
+			return
 		file = service.files().get(fileId=file_id).execute()
 		download_url = file.get('downloadUrl')
 		#print download_url
@@ -180,11 +188,23 @@ class DriveClass:
 			return None
 			
 			
-	def upload(self, title):
+	def upload(self, title, upload_loc):
 		service = self.drive_client
 		tmp = title.split('/')
 		title = '/home/pankaj'+title[1:]
-		parent_id = self.mapping[tmp[len(tmp)-2]]
+		print self.mapping
+		if tmp[len(tmp)-2] in self.mapping.keys():
+			print "Hello", tmp[len(tmp)-2]
+			parent_id = self.mapping[tmp[len(tmp)-2]]
+		else:
+			tmpx = []
+			for i in range(1,len(tmp)-2):
+				tmpx.append(tmp[i])
+				tmpx.append('/')
+			t="".join(tmpx[:len(tmpx)-1])
+			self.create_folder(tmp[len(tmp)-2], t)
+			parent_id = self.mapping[tmp[len(tmp)-2]]
+			#create_folder(tmp[len(tmp)-2], 
 		#print parent_id
 		#print title
 		
@@ -206,6 +226,24 @@ class DriveClass:
 		print "Uploaded "+title
 		#pprint.pprint(file)
 		return
+	
+	def create_folder(self, name, path):
+		service = self.drive_client
+		tmp = path.split('/')
+		if tmp[len(tmp)-1] in self.mapping.keys():
+			parent_id = self.mapping[tmp[len(tmp)-1]]
+		else:
+			print "Error"
+			return
+		body = {
+			'title': name,
+			'parents': [{"id": parent_id}],
+			'mimeType': "application/vnd.google-apps.folder"
+		}
+		file = service.files().insert(body=body).execute()
+		self.mapping[name]=file['id']
+		print "Created Folder", name
+		return
 
 
 	def get_quota(self):
@@ -220,48 +258,25 @@ class DriveClass:
 		except errors.HttpError, error:
 			print 'An error occurred: %s' % error
 			return 0
+		
+	def delete(self, title):  #deletes both files and folders
+		service = self.drive_client
+		if title in self.mapping.keys():
+			file_id = self.mapping[title]
+			del self.mapping[title]
+		else:
+			print "Not Exist"
+			return
+		try:
+			service.files().delete(fileId=file_id).execute()
+			print "Deleted", title
+		except errors.HttpError, error:
+			print 'An error occurred: %s' % error
+		return
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''
-# Copy your credentials from the console
-CLIENT_ID = '278916592295.apps.googleusercontent.com'
-CLIENT_SECRET = 'JjdRNzvxuleTUqrZVzIzWH3M'
-
-# Check https://developers.google.com/drive/scopes for all available scopes
-OAUTH_SCOPE = 'https://www.googleapis.com/auth/drive'
-
-# Redirect URI for installed apps
-REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
-
-# Path to the file to upload
-FILENAME = 'document.txt'
-storage = Storage("token_drive.txt")
-credentials = storage.get()
-http = httplib2.Http()
-http = credentials.authorize(http)
-drive_service = build('drive', 'v2', http=http)
-
-# Insert a file
-media_body = MediaFileUpload(FILENAME, mimetype='text/plain', resumable=True)
-body = {
-  'title': 'My document',
-  'description': 'A test document',
-  'mimeType': 'text/plain'
-}
-
-file = drive_service.files().insert(body=body, media_body=media_body).execute()
-pprint.pprint(file)
-'''
+#drive = DriveClass()
+#drive.retrieve_all_files()
+#drive.delete('pic.JPG')
+#drive.delete('pic.JPG')
+#drive.create_folder('try','easyCloud')

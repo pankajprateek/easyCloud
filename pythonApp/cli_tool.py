@@ -258,6 +258,7 @@ def main():
 
     elif optz.call == 'ls':
         res = list(api.listdir(resolve_path(optz.folder)))
+        print(optz.folder)
         if not optz.objects: res = map(op.itemgetter('name'), res)
 
     elif optz.call == 'info':
@@ -284,6 +285,7 @@ def main():
                          metadata=optz.metadata and json.loads(optz.metadata) or dict())
 
     elif optz.call == 'get':
+        print(optz)
         contents = api.get(resolve_path(optz.file), byte_range=optz.byte_range)
         if optz.file_dst:
             dst_dir = dirname(abspath(optz.file_dst))
@@ -296,6 +298,7 @@ def main():
             sys.stdout.flush()
 
     elif optz.call == 'put':
+        print(optz)
         xres = api.put(optz.file,
                        resolve_path(optz.folder), overwrite=not optz.no_overwrite)
 
