@@ -276,6 +276,7 @@ def main():
         res = api.comment_delete(optz.comment_id)
 
     elif optz.call == 'mkdir':
+        print(optz)
         name, path = optz.name, optz.folder
         if '/' in name.replace('\\', '/'):
             name = optz.name.replace('\\', '/')

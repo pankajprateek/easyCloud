@@ -105,11 +105,34 @@ class skydriveClass:
 		try:
 			resolve_path(t[2:len(t)-1])
 		except:   #Create folder here
-			print("Parent folder does not exist")
-			return
+			tmpx=''
+			for i in range(0,len(tmp)-2):
+				tmpx=tmpx+tmp[i]+'/'
+			self.create_folder(tmp[len(tmp)-2], tmpx[2:len(tmpx)-1])
 		xres = self.api_client.put('/home/pankaj'+title[1:], resolve_path(t[2:len(t)-1]), overwrite=True)
 		if xres:
 			print(location)
+			
+	def create_folder(self, title, location):
+		def id_match( s,
+						_re_id=re.compile(r'^(file|folder)\.[0-9a-f]{16}\.[0-9A-F]{16}!\d+|folder\.[0-9a-f]{16}$') ):
+			return s if s and _re_id.search(s) else None
+		resolve_path_wrap = lambda s: self.api_client.resolve_path(s and s.replace('\\', '/').strip('/'))
+		resolve_path = ( (lambda s: id_match(s) or resolve_path_wrap(s)) \
+							if not False else resolve_path_wrap ) if not False else lambda obj_id: obj_id
+		
+		try:
+			resolve_path(location)
+		except:
+			tmpx = ''
+			tmp = location.split('/')
+			for i in range(0, len(tmp)-1):
+				tmpx = tmpx+tmp[i]+'/'
+			self.create_folder(tmp[len(tmp)-1], tmpx[:len(tmpx)-1])
+		xres = self.api_client.mkdir(name=title, folder_id=resolve_path(location), metadata=None and json.loads(None) or dict())
+		if xres:
+			print("Created Folder:"+location+'/'+title)
+		return
               
 	
 	
