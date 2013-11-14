@@ -12,6 +12,8 @@ class App:
 
 		self.dropbox_button = Button(frame, text = "Dropbox", fg = "black", command = self.authenticate_dropbox)
 		self.dropbox_button.pack(side=LEFT, padx=10, pady=10)
+		self.skydrive_button = Button(frame, text = "Skydrive", fg = "black", command = self.authenticate_skydrive)
+		self.skydrive_button.pack(side=LEFT, padx=10, pady=10)
 		self.googleDrive_button = Button(frame, text = "Google Drive", fg = "black", command = self.authenticate_googleDrive)
 		self.googleDrive_button.pack(side=LEFT, padx=10, pady=10)
 		self.text=Text(frame,height=10,width=50,background='white')
@@ -79,6 +81,17 @@ class App:
 			self.text.insert(END, '1. Go to: ' + out + '\n')
 			self.text.insert(END, '2. Click \"Allow\" (you might have to log in first).\n')
 			self.text.insert(END, '3. Copy the authorization code.\n')
+			
+	def authenticate_skydrive(self):
+		self.log = "Skydrive"
+		out = self.easyCloud.authenticate_skydrive()
+		if out == "[loaded access token]":
+			#self.text.delete(0,END)
+			self.text.insert(END, out)
+		else:
+			#self.text.delete(0,END)
+			self.text.insert(END, '1. Go to: ' + out + '\n')
+			self.text.insert(END, '2. authorize there, confirm access permissions, and paste URL of an empty page (starting with "https://login.live.com/oauth20_desktop.srf") you will get redirected to in the end.\n')
 	
 	def submit_token(self):
 		strg = self.entry.get()
@@ -89,7 +102,10 @@ class App:
 				out = self.easyCloud.send_dropbox_token(strg)
 			elif self.log == "GoogleDrive":
 				out = self.easyCloud.send_googleDrive_token(strg)
+			elif self.log == "Skydrive":
+				out = self.easyCloud.send_skydrive_token(strg)
 			self.text.insert(END, out)
+			self.log = None
 		
 root=Tk()
 root.title('EasyCloud')

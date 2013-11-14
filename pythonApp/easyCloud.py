@@ -1,6 +1,7 @@
 from driveClass import *
 from functions import *
 from dropboxClass import *
+from skydriveClass import *
 from sets import Set
 
 class easyCloud:
@@ -9,6 +10,7 @@ class easyCloud:
 		self.CONFIG_FILE = 'config'
 		self.drop = DropboxClass()
 		self.drive = DriveClass()
+		self.skydrive = skydriveClass()
 
 	def set_location(self, i):
 		f = open(os.path.expanduser(self.CONFIG_FILE), "wb")
@@ -30,6 +32,12 @@ class easyCloud:
 	
 	def send_googleDrive_token(self, strg):
 		return self.drive.run_auth_flow(strg)
+	
+	def authenticate_skydrive(self):
+		return self.skydrive.login()
+	
+	def send_skydrive_token(self, strg):
+		return self.skydrive.auth(strg)
 	
 	def sync(self):
 		file_local, size = get_structure('~/easyCloud',0)

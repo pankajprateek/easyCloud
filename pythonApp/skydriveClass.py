@@ -24,20 +24,31 @@ import api_v5, conf
 class skydriveClass:
 	def __init__(self):
 		self.TOKEN_FILE = "~/.lcrc"
+		self.authenticated = False
+		
+	def login(self):
 		self.api_client = api_v5.PersistentSkyDriveAPI.from_conf(self.TOKEN_FILE)
-		if not self.api_client.get_quota():
-			print('Visit the following URL in any web browser (firefox, chrome, safari, etc),\n'
-					'  authorize there, confirm access permissions, and paste URL of an empty page\n'
-					'  (starting with "https://login.live.com/oauth20_desktop.srf")'
-					' you will get redirected to in the end.')
-			print('Alternatively, use the returned (after redirects)'
-					' URL with "{} auth <URL>" command.\n'.format(sys.argv[0]))
-			print('URL to visit: {}\n'.format(self.api_client.auth_user_get_url()))
-			url = raw_input('URL after last redirect: ').strip()
-			self.api_client.auth_user_process_url(url)
-			self.api_client.auth_get_token()
-			print('API auth was completed successfully')
-		print("[loaded access token]")
+		try:
+			self.api_client.get_quota()
+			#print('Visit the following URL in any web browser (firefox, chrome, safari, etc),\n'
+					#'  authorize there, confirm access permissions, and paste URL of an empty page\n'
+					#'  (starting with "https://login.live.com/oauth20_desktop.srf")'
+					#' you will get redirected to in the end.')
+			#print('Alternatively, use the returned (after redirects)'
+					#' URL with "{} auth <URL>" command.\n'.format(sys.argv[0]))
+			#print('URL to visit: {}\n'.format(self.api_client.auth_user_get_url()))
+			self.authenticated = True
+			return "[loaded access token]"
+		except:
+			return format(self.api_client.auth_user_get_url())
+			
+	
+	def auth(self, url):
+		#url = raw_input('URL after last redirect: ').strip()
+		self.api_client.auth_user_process_url(url)
+		self.api_client.auth_get_token()
+		self.authenticated = True
+		return "[loaded access token]"
 		
 	def get_quota(self):
 		free, quota = self.api_client.get_quota()
