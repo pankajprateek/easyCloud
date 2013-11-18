@@ -98,6 +98,8 @@ class DriveClass:
 				for i in out:
 					oldout.append(i)
 				for i in out:
+					if str(i['shared']) == 'True':
+						continue
 					if i['labels']['trashed'] == True:
 						continue
 					parentLink = i['parents'][0]['parentLink'][len(i['parents'][0]['parentLink'])-28:]

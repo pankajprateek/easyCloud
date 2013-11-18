@@ -11,14 +11,24 @@ class App:
 		#textfr=Frame(frame)
 
 		self.dropbox_button = Button(frame, text = "Dropbox", fg = "black", command = self.authenticate_dropbox)
-		self.dropbox_button.pack(side=LEFT, padx=10, pady=10)
+		self.dropbox_button.place(x=1, y=35, width=120)
+		self.dropbox_button.pack(padx=10, pady=2.5)
+		
 		self.skydrive_button = Button(frame, text = "Skydrive", fg = "black", command = self.authenticate_skydrive)
-		self.skydrive_button.pack(side=LEFT, padx=10, pady=10)
+		self.skydrive_button.place(x=5,y=35, width=120)
+		self.skydrive_button.pack(padx=10, pady=2.5)
+		
 		self.googleDrive_button = Button(frame, text = "Google Drive", fg = "black", command = self.authenticate_googleDrive)
-		self.googleDrive_button.pack(side=LEFT, padx=10, pady=10)
+		self.googleDrive_button.place(x=5,y=35, width=120)
+		self.googleDrive_button.pack(padx=10, pady=2.5)
+		
+		
+		
+		
+		
 		self.text=Text(frame,height=10,width=50,background='white')
+		self.text.place(x=70, y=40)
 		self.text.pack()
-
 		# put a scroll bar in the frame
 
 		#scroll = Scrollbar(textfr)
@@ -27,10 +37,15 @@ class App:
 		
 		
 		self.entry = Entry(frame,width=50)
+		self.entry.place(x=30, y=90)
 		self.entry.pack()
+		
 		
 		self.submit_button = Button(frame, text = "Submit", fg = "black", command = self.submit_token)
 		self.submit_button.pack(side=LEFT, padx=10, pady=10)
+		
+		self.sync_button = Button(frame, text = "Sync", fg = "black", command = self.sync)
+		self.sync_button.pack(side=LEFT, padx=10, pady=10)
 		
 		self.location_var = StringVar(frame)
 		self.location_var.set('Split')
@@ -41,8 +56,7 @@ class App:
 		self.button_location = Button(frame, text = "Set", fg = "black", command = self.set_upload_location)
 		self.button_location.pack(side=LEFT, padx=10, pady=10)
 		
-		self.sync_button = Button(frame, text = "Sync", fg = "black", command = self.sync)
-		self.sync_button.pack(side=LEFT, padx=10, pady=10)
+		
 		#self.button_send = Button(frame, text="Send", command=self.send_data)
 		#self.button_send.pack(side=LEFT)
 		#self.button_receive = Button(frame, text="Send", command=self.receive_data)
@@ -63,7 +77,8 @@ class App:
 		out = self.easyCloud.authenticate_dropbox()
 		if out == "[loaded access token]":
 			#self.text.delete(0,END)
-			self.text.insert(END, out)
+			self.dropbox_button['fg'] = 'red'
+			self.text.insert(END, out+'\n')
 		else:
 			#self.text.delete(0,END)
 			self.text.insert(END, '1. Go to: ' + out + '\n')
@@ -75,7 +90,8 @@ class App:
 		out = self.easyCloud.authenticate_googleDrive()
 		if out == "[loaded access token]":
 			#self.text.delete(0,END)
-			self.text.insert(END, out)
+			self.googleDrive_button['fg'] = 'red'
+			self.text.insert(END, out+'\n')
 		else:
 			#self.text.delete(0,END)
 			self.text.insert(END, '1. Go to: ' + out + '\n')
@@ -87,7 +103,8 @@ class App:
 		out = self.easyCloud.authenticate_skydrive()
 		if out == "[loaded access token]":
 			#self.text.delete(0,END)
-			self.text.insert(END, out)
+			self.skydrive_button['fg'] = 'red'
+			self.text.insert(END, out+'\n')
 		else:
 			#self.text.delete(0,END)
 			self.text.insert(END, '1. Go to: ' + out + '\n')
@@ -100,10 +117,16 @@ class App:
 			out = "None"
 			if self.log == "Dropbox":
 				out = self.easyCloud.send_dropbox_token(strg)
+				if out == "[loaded access token]":
+					self.dropbox_button['fg'] = 'red'
 			elif self.log == "GoogleDrive":
 				out = self.easyCloud.send_googleDrive_token(strg)
+				if out == "[loaded access token]":
+					self.googleDrive_button['fg'] = 'red'
 			elif self.log == "Skydrive":
 				out = self.easyCloud.send_skydrive_token(strg)
+				if out == "[loaded access token]":
+					self.skydrive_button['fg'] = 'red'
 			self.text.insert(END, str(out)+'\n')
 			self.log = None
 		
