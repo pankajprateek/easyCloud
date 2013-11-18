@@ -13,6 +13,7 @@ import itertools as it, operator as op, functools as ft
 from os.path import dirname, basename, exists, isdir, join, abspath
 from collections import defaultdict
 import io, re, types, json
+from functions import *
 
 try:
 	import chardet
@@ -25,6 +26,7 @@ class skydriveClass:
 	def __init__(self):
 		self.TOKEN_FILE = "~/.lcrc"
 		self.authenticated = False
+		self.api_client = None
 		
 	def isAuthenticated(self):
 		return self.authenticated
@@ -41,6 +43,7 @@ class skydriveClass:
 					#' URL with "{} auth <URL>" command.\n'.format(sys.argv[0]))
 			#print('URL to visit: {}\n'.format(self.api_client.auth_user_get_url()))
 			self.authenticated = True
+			print("[loaded access token]")
 			return "[loaded access token]"
 		except:
 			return format(self.api_client.auth_user_get_url())
@@ -51,6 +54,7 @@ class skydriveClass:
 		self.api_client.auth_user_process_url(url)
 		self.api_client.auth_get_token()
 		self.authenticated = True
+		print("[loaded access token]")
 		return "[loaded access token]"
 		
 	def get_quota(self):
@@ -95,9 +99,19 @@ class skydriveClass:
 							if not False else resolve_path_wrap ) if not False else lambda obj_id: obj_id
 		
 		contents = self.api_client.get(resolve_path(title), byte_range=None)
-		to_file = open(os.path.expanduser(location), "wb")
-		to_file.write(contents)
-		print(location)
+		try:
+			to_file = open(os.path.expanduser(location), "wb")
+			to_file.write(contents)
+			print(location)
+		except:
+			tmp = location.split('/')
+			t=""
+			for i in range(0,len(tmp)-1):
+				t=t+tmp[i]+"/"
+			sys_exec("mkdir -p "+t)
+			to_file = open(os.path.expanduser(location), "wb")
+			to_file.write(contents)
+			print(location)
 		
 	def upload(self, title, location):
 		def id_match( s,

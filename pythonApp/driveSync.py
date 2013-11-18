@@ -6,11 +6,11 @@ print "File Local:",
 print file_local
 
 drive = DriveClass()
-print drive.login()
+drive.login()
 file_drive = drive.retrieve_all_files()
 print "File Google Drive:",
 print file_drive
-'''
+
 sync_upload = []
 sync_download = []
 
@@ -58,4 +58,3 @@ for i in sync_upload:
 	#print 'easyCloud'+i,
 	#drop.upload('~/easyCloud'+i,'easyCloud'+i)
 	
-'''

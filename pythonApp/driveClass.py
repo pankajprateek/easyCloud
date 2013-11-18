@@ -16,6 +16,8 @@ from oauth2client.file import Storage
 import logging
 logging.basicConfig()
 
+from functions import *
+
 class DriveClass:
 	def __init__(self):
 		self.mapping={}
@@ -48,6 +50,7 @@ class DriveClass:
 				http = self.credentials.authorize(http)
 				self.drive_client = build('drive', 'v2', http=http)
 				self.authenticated = True
+				print "[loaded access token]"
 				return "[loaded access token]"
 		except IOError:
 			"""log in to a Drive account"""
@@ -67,6 +70,7 @@ class DriveClass:
 		http = self.credentials.authorize(http)
 		self.drive_client = build('drive', 'v2', http=http)
 		self.authenticated = True
+		print "[loaded access token]"
 		return "[loaded access token]"
 		
 	def isAuthenticated(self):
@@ -194,8 +198,18 @@ class DriveClass:
 			resp, content = service._http.request(download_url)
 			if resp.status == 200:
 				print 'Status: %s' % resp
-				to_file = open(os.path.expanduser(to_path), "wb")
-				to_file.write(content)
+				try:
+					to_file = open(os.path.expanduser(to_path), "wb")
+					to_file.write(content)
+				except:
+					tmp = to_path.split('/')
+					t=""
+					for i in range(0,len(tmp)-1):
+						t=t+tmp[i]+"/"
+					sys_exec("mkdir -p "+t)
+					to_file = open(os.path.expanduser(to_path), "wb")
+					to_file.write(content)
+					print to_path
 				#print content
 			else:
 				print 'An error occurred: %s' % resp

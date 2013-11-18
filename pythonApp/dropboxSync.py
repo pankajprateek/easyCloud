@@ -1,11 +1,13 @@
 from dropboxClass import *
 from functions import *
 
-file_local = get_structure('~/easyCloud',0)
+file_local,b = get_structure('~/easyCloud',0)
 print "File Local:",
 print file_local
 
 drop = DropboxClass()
+drop.login()
+print
 file_drop = drop.display_info('/easyCloud')
 print "File Dropbox:",
 print file_drop

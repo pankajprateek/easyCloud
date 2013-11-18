@@ -6,6 +6,7 @@ print "File Local:",
 print file_local
 
 skydrive = skydriveClass()
+skydrive.login()
 file_sky = skydrive.get_info()
 print "File skydrive:",
 print file_sky

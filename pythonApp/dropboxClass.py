@@ -8,6 +8,7 @@ import shlex
 import sys
 
 from dropbox import client, rest
+from functions import *
 
 class DropboxClass:
 	def __init__(self):
@@ -23,6 +24,7 @@ class DropboxClass:
 			token = open(self.TOKEN_FILE).read()
 			self.api_client = client.DropboxClient(token)
 			self.authenticated = True
+			print "[loaded access token]"
 			return "[loaded access token]"
 		except IOError:
 			#pass # don't worry if it's not there
@@ -47,6 +49,7 @@ class DropboxClass:
 			f.write(access_token)
 		self.api_client = client.DropboxClient(access_token)
 		self.authenticated = True
+		print "[loaded access token]"
 		return "[loaded access token]"
 	
 	def isAuthenticated(self):
@@ -77,10 +80,21 @@ class DropboxClass:
 	
 	def download(self, from_path, to_path):
 		from_path = from_path[2:]
-		to_file = open(os.path.expanduser(to_path), "wb")
-		f, metadata = self.api_client.get_file_and_metadata(self.current_path + "/" + from_path)
-		print 'Metadata:', metadata
-		to_file.write(f.read())
+		try:
+			to_file = open(os.path.expanduser(to_path), "wb")
+			f, metadata = self.api_client.get_file_and_metadata(self.current_path + "/" + from_path)
+			print 'Metadata:', metadata
+			to_file.write(f.read())
+		except:
+			tmp = to_path.split('/')
+			t=""
+			for i in range(0,len(tmp)-1):
+				t=t+tmp[i]+"/"
+			sys_exec("mkdir -p "+t)
+			to_file = open(os.path.expanduser(to_path), "wb")
+			f, metadata = self.api_client.get_file_and_metadata(self.current_path + "/" + from_path)
+			print 'Metadata:', metadata
+			to_file.write(f.read())
 		
 	def upload(self, from_path, to_path):
 		to_path = to_path[2:]
