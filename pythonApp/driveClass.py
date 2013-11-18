@@ -13,6 +13,8 @@ from apiclient.http import MediaFileUpload
 from apiclient import errors
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
+import logging
+logging.basicConfig()
 
 class DriveClass:
 	def __init__(self):
@@ -65,7 +67,7 @@ class DriveClass:
 		http = self.credentials.authorize(http)
 		self.drive_client = build('drive', 'v2', http=http)
 		self.authenticated = True
-		print "[loaded access token]"
+		return "[loaded access token]"
 		
 	def isAuthenticated(self):
 		return self.authenticated

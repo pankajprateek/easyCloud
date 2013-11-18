@@ -104,7 +104,7 @@ class App:
 				out = self.easyCloud.send_googleDrive_token(strg)
 			elif self.log == "Skydrive":
 				out = self.easyCloud.send_skydrive_token(strg)
-			self.text.insert(END, out)
+			self.text.insert(END, str(out)+'\n')
 			self.log = None
 		
 root=Tk()
