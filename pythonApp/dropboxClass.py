@@ -40,7 +40,7 @@ class DropboxClass:
 		try:
 			access_token, user_id = self.flow.finish(code)
 		except rest.ErrorResponse, e:
-			self.stdout.write('Error: %s\n' % str(e))
+			print('Error: %s\n' % str(e))
 			return "Error " + str(e)
 		
 		with open(self.TOKEN_FILE, 'w') as f:

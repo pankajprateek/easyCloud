@@ -12,9 +12,9 @@ class easyCloud:
 		self.drive = DriveClass()
 		self.skydrive = skydriveClass()
 		self.size = []
-		self.authenticate_dropbox()
-		self.authenticate_googleDrive()
-		self.authenticate_skydrive()
+		#self.authenticate_dropbox()
+		#self.authenticate_googleDrive()
+		#self.authenticate_skydrive()
 		
 	def authenticate_dropbox(self):
 		return self.drop.login()
@@ -89,6 +89,11 @@ class easyCloud:
 			return key
 	
 	def sync(self):
+		sync_upload = []
+		sync_download = []
+		file_drive = []
+		file_drop = []
+		file_skydrive = []
 		file_local, self.size = get_structure('~/easyCloud',0)
 		
 		if self.drive.isAuthenticated():
@@ -157,14 +162,17 @@ class easyCloud:
 				print "Not enough Space"
 				continue
 			elif loc == "All":
+				if self.drop.isAuthenticated():
+					self.drop.upload(i,i)
+				if self.drive.isAuthenticated():
+					self.drive.upload(i,i)
+				if self.skydrive.isAuthenticated():
+					self.skydrive.upload(i,i)
+			elif loc == 'dropbox' and self.drop.isAuthenticated():
 				self.drop.upload(i,i)
+			elif loc == 'googleDrive' and self.drive.isAuthenticated():
 				self.drive.upload(i,i)
-				self.skydrive.upload(i,i)
-			elif loc == 'dropbox':
-				self.drop.upload(i,i)
-			elif loc == 'googleDrive':
-				self.drive.upload(i,i)
-			elif loc == 'skyDrive':
+			elif loc == 'skyDrive' and self.skydrive.isAuthenticated():
 				self.skydrive.upload(i,i)
 		
 		print "Synced"
