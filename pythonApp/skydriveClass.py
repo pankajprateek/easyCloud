@@ -26,6 +26,9 @@ class skydriveClass:
 		self.TOKEN_FILE = "~/.lcrc"
 		self.authenticated = False
 		
+	def isAuthenticated(self):
+		return self.authenticated
+	
 	def login(self):
 		self.api_client = api_v5.PersistentSkyDriveAPI.from_conf(self.TOKEN_FILE)
 		try:
