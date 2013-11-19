@@ -6,8 +6,10 @@ from sets import Set
 
 class easyCloud:
 	def __init__(self):
-		self.upload_location = 'Split' #read from config file
 		self.CONFIG_FILE = 'config'
+		f = open(self.CONFIG_FILE, "r")
+		self.upload_location = f.readlines()[0] #read from config file
+		f.close()
 		self.drop = DropboxClass()
 		self.drive = DriveClass()
 		self.skydrive = skydriveClass()
@@ -15,6 +17,9 @@ class easyCloud:
 		#self.authenticate_dropbox()
 		#self.authenticate_googleDrive()
 		#self.authenticate_skydrive()
+		
+	def getDefaultLocation(self):
+		return self.upload_location
 		
 	def authenticate_dropbox(self):
 		return self.drop.login()
@@ -53,13 +58,13 @@ class easyCloud:
 	def getUploadLocation(self, i):
 		if self.upload_location == 'Only To Dropbox':	
 			return "dropbox"
-		if self.upload_location == 'Only To Google Drive':	
+		elif self.upload_location == 'Only To Google Drive':	
 			return "googleDrive"
-		if self.upload_location == 'Only To Sky Drive':	
+		elif self.upload_location == 'Only To Sky Drive':	
 			return "skyDrive"
-		if self.upload_location == 'All':
+		elif self.upload_location == 'All':
 			return "all"
-		if self.upload_location == 'Split':
+		elif self.upload_location == 'Split':
 			#print "Split"
 			file_size = int(self.size[i])
 			config = {}
@@ -87,6 +92,10 @@ class easyCloud:
 					
 			print key
 			return key
+		else:
+			print self.upload_location, 'Only To Google Drive', i
+			print "Hell"
+			return 0
 	
 	def sync(self):
 		sync_upload = []
@@ -154,10 +163,12 @@ class easyCloud:
 				self.drop.download(i, i)
 			elif i in file_drive:
 				self.drive.download(i, i)
+			elif i in file_skydrive:
+				self.skydrive.download(i, i)
 
 		for i in sync_upload:
 			loc = self.getUploadLocation(i)
-			print "Location", loc
+			print loc
 			if loc == "":
 				print "Not enough Space"
 				continue

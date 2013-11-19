@@ -48,19 +48,17 @@ class App:
 		self.sync_button.pack(side=LEFT, padx=10, pady=10)
 		
 		self.location_var = StringVar(frame)
-		self.location_var.set('Split')
-		self.location_choices = ['Split', 'All', 'Only To Dropbox', 'Only to Google Drive', 'Only To SkyDrive']
+		self.location_var.set(str(self.easyCloud.getDefaultLocation()))
+		self.location_choices = ['Split', 'All', 'Only To Dropbox', 'Only To Google Drive', 'Only To SkyDrive']
 		self.location_option = OptionMenu(frame, self.location_var, *(self.location_choices))
 		self.location_option.pack(side='left', padx=10, pady=10)
 		
 		self.button_location = Button(frame, text = "Set", fg = "black", command = self.set_upload_location)
 		self.button_location.pack(side=LEFT, padx=10, pady=10)
 		
-		
-		#self.button_send = Button(frame, text="Send", command=self.send_data)
-		#self.button_send.pack(side=LEFT)
-		#self.button_receive = Button(frame, text="Send", command=self.receive_data)
-		#self.button_receive.pack(side=LEFT)
+		self.easyCloud.authenticate_dropbox()
+		self.easyCloud.authenticate_googleDrive()
+		#self.easyCloud.authenticate_skydrive()
 		
 	def set_upload_location(self):
 		self.easyCloud.set_location(self.location_var.get())
@@ -70,6 +68,7 @@ class App:
 		print self.easyCloud.upload_location
 		
 	def sync(self):
+		print "Syncing"
 		self.easyCloud.sync()
 		
 	def authenticate_dropbox(self):
@@ -135,9 +134,15 @@ root.title('EasyCloud')
 
 app = App(root)
 
+f = False
+i = 0
+
+def loop2():
+	app.sync()
+	root.after(900000, loop2)
+
 def loop():
-	#app.print_var()
-	root.after(10000, loop)
+	root.after(1000, loop2)
 
 
 root.after(1, loop)
