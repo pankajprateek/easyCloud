@@ -100,6 +100,7 @@ class DropboxClass:
 		to_path = to_path[2:]
 		from_file = open(os.path.expanduser(from_path), "rb")
 		self.api_client.put_file(self.current_path + "/" + to_path, from_file)
+		print "Uploaded", from_path
 		
 	def get_quota(self):
 		f = self.api_client.account_info()

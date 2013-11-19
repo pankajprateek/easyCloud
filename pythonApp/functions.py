@@ -11,17 +11,24 @@ def sys_exec(command):
 structure = []
 size = {}
 modified = {}
+	
 def get_structure(path,depth):
-	out = sys_exec("".join(['ls -al ',path]))
-	out2=out[1].split('\n')
-	for temp in out2[3:]:
-		temp1 = temp.split()
-		if temp1[0][0]=='d':
-			tmp = get_structure("".join([path,'/',temp1[8]]),depth+1)
-		else:
-			size["".join([path,'/',temp1[8]])] = temp1[4]
-			modified["".join([path,'/',temp1[8]])] = [temp1[5], int(temp1[6]), int(temp1[7].split(':')[0])*100+int(temp1[7].split(':')[1])]
-			structure.append("".join([path,'/',temp1[8]]))
+	def get_st(path,depth):
+		out = sys_exec("".join(['ls -al ',path]))
+		out2=out[1].split('\n')
+		for temp in out2[3:]:
+			temp1 = temp.split()
+			if temp1[0][0]=='d':
+				tmp = get_st("".join([path,'/',temp1[8]]),depth+1)
+			else:
+				size["".join([path,'/',temp1[8]])] = temp1[4]
+				modified["".join([path,'/',temp1[8]])] = [temp1[5], int(temp1[6]), int(temp1[7].split(':')[0])*100+int(temp1[7].split(':')[1])]
+				structure.append("".join([path,'/',temp1[8]]))
+			
+	structure = []
+	size = {}
+	modified = {}
+	get_st(path,depth)
 	return structure, size, modified
 			
 def display_structure(path,depth):

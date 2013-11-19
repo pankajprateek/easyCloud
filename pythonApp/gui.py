@@ -5,6 +5,7 @@ class App:
 	def __init__(self,master):
 		self.easyCloud = easyCloud()
 		self.log = None
+		self.currentList = []
 		frame = Frame(master)
 		frame.pack()
 	
@@ -60,8 +61,11 @@ class App:
 		self.button_location.pack(side=LEFT, padx=10, pady=10)
 		
 		#self.easyCloud.authenticate_dropbox()
+		#self.dropbox_button['fg'] = 'red'
 		#self.easyCloud.authenticate_googleDrive()
-		#self.easyCloud.authenticate_skydrive()
+		#self.googleDrive_button['fg'] = 'red'
+		self.easyCloud.authenticate_skydrive()
+		self.skydrive_button['fg'] = 'red'
 		
 	def set_upload_location(self):
 		self.easyCloud.set_location(self.location_var.get())
@@ -73,6 +77,7 @@ class App:
 	def sync(self):
 		print "Syncing"
 		self.easyCloud.sync()
+		return
 		
 	def authenticate_dropbox(self):
 		self.log = "Dropbox"
@@ -131,6 +136,15 @@ class App:
 					self.skydrive_button['fg'] = 'red'
 			self.text.insert(END, str(out)+'\n')
 			self.log = None
+			
+	def compareLocalFileList(self):
+		newList = self.easyCloud.getLocalFileList()
+		if list(set(newList) - set(self.currentList)) or list(set(self.currentList) - set(newList)):
+			self.currentList = newList
+			return False
+		else:
+			self.currentList = newList
+			return True
 		
 root=Tk()
 root.title('EasyCloud')
@@ -147,6 +161,13 @@ def loop2():
 def loop():
 	root.after(1000, loop2)
 
-
-root.after(1, loop)
+def loop4():
+	if not app.compareLocalFileList():
+		app.sync()
+	root.after(5000, loop4)
+	
+def loop3():
+	root.after(1000, loop4)
+	
+root.after(1, loop3) #pass loop for 15min Sync, loop3 for event driven
 root.mainloop()

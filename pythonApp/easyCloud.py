@@ -39,6 +39,10 @@ class easyCloud:
 	
 	def send_skydrive_token(self, strg):
 		return self.skydrive.auth(strg)
+	
+	def getLocalFileList(self):
+		file_local, a, b = get_structure('~/easyCloud',0)
+		return file_local
 		
 	def auth_list(self):
 		authenticated_list = []
@@ -64,7 +68,7 @@ class easyCloud:
 		elif self.upload_location == 'Only To SkyDrive':	
 			return "skyDrive"
 		elif self.upload_location == 'All':
-			return "all"
+			return "All"
 		elif self.upload_location == 'Split':
 			#print "Split"
 			file_size = int(self.size[i])
@@ -105,7 +109,6 @@ class easyCloud:
 		file_drop = []
 		file_skydrive = []
 		file_local, self.size, self.modified = get_structure('~/easyCloud',0)
-		print self.modified
 		
 		if self.drive.isAuthenticated():
 			file_drive = self.drive.retrieve_all_files();
@@ -170,7 +173,6 @@ class easyCloud:
 
 		for i in sync_upload:
 			loc = self.getUploadLocation(i)
-			print loc
 			if loc == "":
 				print "Not enough Space"
 				continue
