@@ -10,6 +10,7 @@ def sys_exec(command):
 	
 structure = []
 size = {}
+modified = {}
 def get_structure(path,depth):
 	out = sys_exec("".join(['ls -al ',path]))
 	out2=out[1].split('\n')
@@ -19,17 +20,18 @@ def get_structure(path,depth):
 			tmp = get_structure("".join([path,'/',temp1[8]]),depth+1)
 		else:
 			size["".join([path,'/',temp1[8]])] = temp1[4]
+			modified["".join([path,'/',temp1[8]])] = [temp1[5], int(temp1[6]), int(temp1[7].split(':')[0])*100+int(temp1[7].split(':')[1])]
 			structure.append("".join([path,'/',temp1[8]]))
-	return structure, size
+	return structure, size, modified
 			
 def display_structure(path,depth):
-	temp = get_structure(path,depth)
+	temp,x = get_structure(path,depth)
 	for i in temp:
 		print i
 		
 #display_structure('~/easyCloud',0)
-#out = get_structure('~/easyCloud',0)
-#print out
+#out, b, x = get_structure('~/easyCloud',0)
+#print x
 '''
 out = sys_exec("ls -al ~/easyCloud")
 #print out[1]

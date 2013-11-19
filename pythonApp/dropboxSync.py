@@ -1,7 +1,7 @@
 from dropboxClass import *
 from functions import *
 
-file_local,b = get_structure('~/easyCloud',0)
+file_local,b,c = get_structure('~/easyCloud',0)
 print "File Local:",
 print file_local
 

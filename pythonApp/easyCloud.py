@@ -14,6 +14,7 @@ class easyCloud:
 		self.drive = DriveClass()
 		self.skydrive = skydriveClass()
 		self.size = []
+		self.modified = {}
 		#self.authenticate_dropbox()
 		#self.authenticate_googleDrive()
 		#self.authenticate_skydrive()
@@ -103,7 +104,8 @@ class easyCloud:
 		file_drive = []
 		file_drop = []
 		file_skydrive = []
-		file_local, self.size = get_structure('~/easyCloud',0)
+		file_local, self.size, self.modified = get_structure('~/easyCloud',0)
+		print self.modified
 		
 		if self.drive.isAuthenticated():
 			file_drive = self.drive.retrieve_all_files();
