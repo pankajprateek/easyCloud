@@ -11,6 +11,9 @@ file_drive = drive.retrieve_all_files()
 print "File Google Drive:",
 print file_drive
 
+print drive.getModificationData()
+
+'''
 sync_upload = []
 sync_download = []
 
@@ -58,3 +61,4 @@ for i in sync_upload:
 	#print 'easyCloud'+i,
 	#drop.upload('~/easyCloud'+i,'easyCloud'+i)
 	
+'''

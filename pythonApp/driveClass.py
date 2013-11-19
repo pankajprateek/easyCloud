@@ -21,6 +21,7 @@ from functions import *
 class DriveClass:
 	def __init__(self):
 		self.mapping={}
+		self.modify={}
 		self.TOKEN_FILE = "token_drive.txt"
 		# Copy your credentials from the console
 		self.CLIENT_ID = '278916592295.apps.googleusercontent.com'
@@ -84,6 +85,7 @@ class DriveClass:
 			prefix2 = {}
 			trashed = []
 			for i in out:
+				self.modify[i['title']] = i['modifiedDate']
 				self.mapping[i['title']] = i['id']
 				if i['title'] == 'easyCloud':
 					cloud.append(i['parents'][0]['selfLink'][len(i['parents'][0]['selfLink'])-56:len(i['parents'][0]['selfLink'])-28])
@@ -153,6 +155,10 @@ class DriveClass:
 				print 'An error occurred: %s' % error
 				break
 		return restructure(result)
+	
+	def getModificationData(self):
+		self.retrieve_all_files()
+		return self.modify
 	
 	def upload(self):
 		service = self.drive_client
