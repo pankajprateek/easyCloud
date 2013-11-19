@@ -9,18 +9,21 @@ class App:
 		frame.pack()
 	
 		#textfr=Frame(frame)
+		
+		frame2 = Frame(frame, height=40, width=50)
+		frame2.pack()
 
-		self.dropbox_button = Button(frame, text = "Dropbox", fg = "black", command = self.authenticate_dropbox)
-		self.dropbox_button.place(x=1, y=35, width=120)
-		self.dropbox_button.pack(padx=10, pady=2.5)
+		self.dropbox_button = Button(frame2, text = "Dropbox", fg = "black", command = self.authenticate_dropbox)
+		#self.dropbox_button.place(x=1, y=35, width=120)
+		self.dropbox_button.pack(side=LEFT, padx=10, pady=2.5)
 		
-		self.skydrive_button = Button(frame, text = "Skydrive", fg = "black", command = self.authenticate_skydrive)
-		self.skydrive_button.place(x=5,y=35, width=120)
-		self.skydrive_button.pack(padx=10, pady=2.5)
+		self.skydrive_button = Button(frame2, text = "Skydrive", fg = "black", command = self.authenticate_skydrive)
+		#self.skydrive_button.place(x=5,y=35, width=120)
+		self.skydrive_button.pack(side=LEFT, padx=10, pady=2.5)
 		
-		self.googleDrive_button = Button(frame, text = "Google Drive", fg = "black", command = self.authenticate_googleDrive)
-		self.googleDrive_button.place(x=5,y=35, width=120)
-		self.googleDrive_button.pack(padx=10, pady=2.5)
+		self.googleDrive_button = Button(frame2, text = "Google Drive", fg = "black", command = self.authenticate_googleDrive)
+		#self.googleDrive_button.place(x=5,y=35, width=120)
+		self.googleDrive_button.pack(side=LEFT, padx=10, pady=2.5)
 		
 		
 		
@@ -58,7 +61,7 @@ class App:
 		
 		#self.easyCloud.authenticate_dropbox()
 		#self.easyCloud.authenticate_googleDrive()
-		self.easyCloud.authenticate_skydrive()
+		#self.easyCloud.authenticate_skydrive()
 		
 	def set_upload_location(self):
 		self.easyCloud.set_location(self.location_var.get())
