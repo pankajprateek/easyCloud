@@ -56,9 +56,9 @@ class App:
 		self.button_location = Button(frame, text = "Set", fg = "black", command = self.set_upload_location)
 		self.button_location.pack(side=LEFT, padx=10, pady=10)
 		
-		self.easyCloud.authenticate_dropbox()
-		self.easyCloud.authenticate_googleDrive()
-		#self.easyCloud.authenticate_skydrive()
+		#self.easyCloud.authenticate_dropbox()
+		#self.easyCloud.authenticate_googleDrive()
+		self.easyCloud.authenticate_skydrive()
 		
 	def set_upload_location(self):
 		self.easyCloud.set_location(self.location_var.get())

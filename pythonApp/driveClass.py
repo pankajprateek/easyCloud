@@ -221,7 +221,10 @@ class DriveClass:
 	def upload(self, title, upload_loc):
 		service = self.drive_client
 		tmp = title.split('/')
-		title = '/home/pankaj'+title[1:]
+		x,y = sys_exec('pwd')
+		y = y.split('/')
+		home_location = '/'+y[1]+'/'+y[2]
+		title = home_location+title[1:]
 		if tmp[len(tmp)-2] in self.mapping.keys():
 			parent_id = self.mapping[tmp[len(tmp)-2]]
 		else:

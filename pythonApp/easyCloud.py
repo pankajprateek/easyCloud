@@ -60,7 +60,7 @@ class easyCloud:
 			return "dropbox"
 		elif self.upload_location == 'Only To Google Drive':	
 			return "googleDrive"
-		elif self.upload_location == 'Only To Sky Drive':	
+		elif self.upload_location == 'Only To SkyDrive':	
 			return "skyDrive"
 		elif self.upload_location == 'All':
 			return "all"

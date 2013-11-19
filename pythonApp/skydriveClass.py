@@ -137,7 +137,10 @@ class skydriveClass:
 			for i in range(0,len(tmp)-2):
 				tmpx=tmpx+tmp[i]+'/'
 			self.create_folder(tmp[len(tmp)-2], tmpx[2:len(tmpx)-1])
-		xres = self.api_client.put('/home/pankaj'+title[1:], resolve_path(t[2:len(t)-1]), overwrite=True)
+		x,y = sys_exec('pwd')
+		y = y.split('/')
+		home_location = '/'+y[1]+'/'+y[2]
+		xres = self.api_client.put(home_location+title[1:], resolve_path(t[2:len(t)-1]), overwrite=True)
 		if xres:
 			print(location)
 			
