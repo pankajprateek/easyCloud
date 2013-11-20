@@ -77,7 +77,7 @@ class App:
 		print self.easyCloud.upload_location
 		
 	def sync(self):
-		print "Syncing"
+		print "Syncing..."
 		self.easyCloud.sync()
 		return
 		

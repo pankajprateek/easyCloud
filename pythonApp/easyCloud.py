@@ -223,4 +223,4 @@ class easyCloud:
 			f.write(i+'\n')
 		f.close()
 		
-		print "Synced"
+		print "Synced..."
