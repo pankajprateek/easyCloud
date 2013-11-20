@@ -106,11 +106,18 @@ class DropboxClass:
 		f = self.api_client.account_info()
 		return f['quota_info']['quota'], f['quota_info']['normal']+f['quota_info']['shared']
 	
+	def delete(self, title):
+		title = title[2:]
+		self.api_client.file_delete(self.current_path+'/'+title)
+		print "Deleted", title
+	
 def main():	
 	drop = DropboxClass()
-	out = drop.display_info('/easyCloud')
-	for i in out:
-		print i
+	drop.login()
+	#out = drop.display_info('/easyCloud')
+	#for i in out:
+		#print i
+	drop.delete('~/easyCloud/bing')
 	
 if __name__ == '__main__':
 	main()
