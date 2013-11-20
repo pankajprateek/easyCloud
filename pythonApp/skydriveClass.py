@@ -165,9 +165,24 @@ class skydriveClass:
 			print("Created Folder:"+location+'/'+title)
 		return
               
+	def delete(self, title):
+		def id_match( s,
+						_re_id=re.compile(r'^(file|folder)\.[0-9a-f]{16}\.[0-9A-F]{16}!\d+|folder\.[0-9a-f]{16}$') ):
+			return s if s and _re_id.search(s) else None
+		resolve_path_wrap = lambda s: self.api_client.resolve_path(s and s.replace('\\', '/').strip('/'))
+		resolve_path = ( (lambda s: id_match(s) or resolve_path_wrap(s)) \
+							if not False else resolve_path_wrap ) if not False else lambda obj_id: obj_id
+		
+		title = title[2:]
+		obj = resolve_path(title)
+		xres = self.api_client.delete(obj)
+		if xres:
+			print('Deleted'+title)
 	
 	
 #skydrive = skydriveClass()
+#skydrive.login()
+#skydrive.delete('~/easyCloud/test1/cpptest')
 #print(skydrive.get_quota())
 #out = skydrive.get_info()
 #for i in out:

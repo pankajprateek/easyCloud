@@ -308,7 +308,12 @@ def main():
         xres = (api.move if optz.call == 'mv' else api.copy)(*argz)
 
     elif optz.call == 'rm':
-        for obj in it.imap(resolve_path, optz.object): xres = api.delete(obj)
+        for i in it.imap(resolve_path, optz.object):
+            print(i)
+        print(optz.object)
+        for obj in it.imap(resolve_path, optz.object): 
+            print(obj)
+            xres = api.delete(obj)
 
 
     elif optz.call == 'tree':
