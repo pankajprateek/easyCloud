@@ -6,6 +6,7 @@ from sets import Set
 
 class easyCloud:
 	def __init__(self):
+		self.LIST_FILE = 'file_list'
 		self.CONFIG_FILE = 'config'
 		f = open(self.CONFIG_FILE, "r")
 		self.upload_location = f.readlines()[0] #read from config file
@@ -110,6 +111,12 @@ class easyCloud:
 		file_skydrive = []
 		file_local, self.size, self.modified = get_structure('~/easyCloud',0)
 		
+		oldlist = []
+		f = open(self.LIST_FILE, 'r')
+		a = f.readlines()
+		for i in a:
+			oldlist.append(i.strip())
+		
 		if self.drive.isAuthenticated():
 			file_drive = self.drive.retrieve_all_files();
 		else: 
@@ -141,15 +148,21 @@ class easyCloud:
 			file_local_set.add(i)
 
 		sync_download = []
+		sync_delete = []
 		for i in merged_file_list_cloud:
 			flag = False
 			for j in file_local:
 				if i == j:
 					flag = True
 			if not flag:
-				sync_download.append(i)
+				#File was present before, not present now, it means it was deleted from local space, so delee it
+				#if not in oldlist would mean was introduced in the cloud, so download
+				if i in oldlist: 
+					sync_delete.append(i)
+				else:
+					sync_download.append(i)
 
-		sync_upload = []		
+		sync_upload = []
 		for i in file_local:
 			flag = False
 			for j in merged_file_list_cloud:
@@ -158,10 +171,24 @@ class easyCloud:
 			if not flag:
 				sync_upload.append(i)
 
+		#print file_drive
+		#print file_drop
+		#print file_skydrive
+		#print file_local
 		print "Sync Download:",
 		print sync_download
 		print "Sync Upload:",
 		print sync_upload
+		print "Sync Delete:",
+		print sync_delete
+		
+		for i in sync_delete:
+			if i in file_drop:
+				self.drop.delete(i)
+			if i in file_drive:
+				self.drive.delete(i)
+			if i in file_skydrive:
+				self.skydrive.delete(i)
 
 		for i in sync_download:
 			if i in file_drop:	
@@ -173,7 +200,7 @@ class easyCloud:
 
 		for i in sync_upload:
 			loc = self.getUploadLocation(i)
-			if loc == "":
+			if loc == "" or loc == None:
 				print "Not enough Space"
 				continue
 			elif loc == "All":
@@ -189,5 +216,11 @@ class easyCloud:
 				self.drive.upload(i,i)
 			elif loc == 'skyDrive' and self.skydrive.isAuthenticated():
 				self.skydrive.upload(i,i)
+		
+		file_local, self.size, self.modified = get_structure('~/easyCloud',0)
+		f = open(self.LIST_FILE, 'w')
+		for i in file_local:
+			f.write(i+'\n')
+		f.close()
 		
 		print "Synced"

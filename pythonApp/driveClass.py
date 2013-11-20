@@ -305,6 +305,8 @@ class DriveClass:
 			return 0
 		
 	def delete(self, title):  #deletes both files and folders
+		tmp = title.split('/')
+		title = tmp[len(tmp)-1]
 		service = self.drive_client
 		if title in self.mapping.keys():
 			file_id = self.mapping[title]
@@ -314,7 +316,7 @@ class DriveClass:
 			return
 		try:
 			service.files().delete(fileId=file_id).execute()
-			print "Deleted", title
+			print "Deleted from GoogleDrive", title
 		except errors.HttpError, error:
 			print 'An error occurred: %s' % error
 		return

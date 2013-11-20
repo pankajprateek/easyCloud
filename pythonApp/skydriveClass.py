@@ -73,9 +73,9 @@ class skydriveClass:
 		def get_file_info(path, prefix):
 			res = list(self.api_client.listdir(resolve_path(path)))
 			for i in res:
-				if i['type'] == 'folder':
+				if i['type'] == 'folder' or i['type'] == 'album':
 					get_file_info(prefix+i['name'], prefix+i['name']+'/')
-				if i['type'] == 'file':
+				if i['type'] == 'file' or i['type'] == 'photo':
 					structure.append(prefix+i['name'])
 
 		path = '/me/skydrive'
@@ -176,8 +176,7 @@ class skydriveClass:
 		title = title[2:]
 		obj = resolve_path(title)
 		xres = self.api_client.delete(obj)
-		if xres:
-			print('Deleted'+title)
+		print('Deleted from skydrive'+title)
 	
 	
 #skydrive = skydriveClass()

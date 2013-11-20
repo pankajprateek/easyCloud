@@ -109,7 +109,7 @@ class DropboxClass:
 	def delete(self, title):
 		title = title[2:]
 		self.api_client.file_delete(self.current_path+'/'+title)
-		print "Deleted", title
+		print "Deleted from dropbox", title
 	
 def main():	
 	drop = DropboxClass()
