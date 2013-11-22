@@ -16,14 +16,22 @@
 \maketitle
 
 \section{Introduction}
-Easy Cloud serves as a replacement to the paid services provided by Cloud Storage Services such as Dropbox, Google and Skydrive. We though this framework want to provide a larger amount of data being accessible on the cloud. The initial motive to work on this problem has been the work of some of the people implementing hacky prototype of the model. But as there isn’t a system which is in use as of now, the idea is to make it in a more robust and scalable way. Easy Cloud provides you a drive on your local disk which is synced to one/more of the online storage sites. It syncs your files to Dropbox, Google Drive and Skydrive.  The target audience for this project includes all the people who are using cloud storage services. We have built this app as a Desktop app, and it has been thoroughly tested on linux only. We plan to extend the support to windows in upcoming releases.
+Easy Cloud serves as a replacement to the paid services provided by Cloud Storage Services such as Dropbox, Google and Skydrive. Through this system, we aim to provide the user an abstract layer over various cloud services, which would give the impression of a larger amount of data being accessible on the cloud by combining the spaces provided by these services.
+
+Though there are various paid services which provide a larger amount of cloud space,  but they charge too much. On the other hand, people have free space available at various cloud services. The initial motivation was to use this space. The idea is to make it in a more robust and scalable way, providing the user a drive like structure (like Dropbox and Google Drive desktop clients). 
+
+EasyCloud provides you a drive on your local disk which is synced to one/more of the online storage sites. The files are currently synced to Dropbox, Google Drive and Skydrive.  The target audience for this project includes all the people who are using cloud storage services.
+
+Currently, the drive has been implemented and throughly tested for linux. We plan to extend the support to windows in upcoming releases.
 
 \section{Functionality}
-The app on installation asks the user to create a folder named "EasyCloud" and put the files it wants to sync in this folder only. There needs to be a same named folder in the cloud locations in Dropbox, google drive, and skydrive. There is a GUI which allows user to choose some set of sync settings which are as follows.
+The app on installation asks the user to create a folder named "easyCloud" and put the files it wants to sync in this folder only. There needs to be a same named folder in the cloud locations in Dropbox, Google Drive, and Skydrive. The easyCloud folder on the local drive is synced with the combination of corresponding folders on \{Dropbox, Google Drive, and Skydrive\}.
+
+We have a basic GUI which allows user to choose some set of sync settings which are as follows.
 \begin{enumerate}
 	\item Upload Location. The following options are available.
 	\begin{itemize}
-	\item Split: It stores the file in exactly on of the place on the cloud. This is decided by an algorithm which is described in later sections.
+	\item Split: It stores the file in exactly one of the place on the cloud. This is decided by an algorithm which is described in later sections.
 	\item All: This simultaneously updates the file to all the places on the cloud which are authenticated by the user
 	\item Only to Dropbox.
 	\item Only to SkyDrive.
@@ -31,38 +39,43 @@ The app on installation asks the user to create a folder named "EasyCloud" and p
 	\end{itemize}
 	\item Sync:
 	\begin{itemize}
-	\item A sync button is provided on clicking which the files in the local drive are synced to the files on the cloud
-	\item A sync is also carried out every 15 minutes 	
+	\item A sync button is provided on clicking which the files in the local drive are synced to the files on the cloud.
+	\item A sync is also carried out every 15 minutes.
+	\item Event driven sync is also implemented. In this case, if the application detects a change in the file structure of the easyCloud folder on the local drive (by comparing it to an older version of the list every 2 seconds), the files are synced. Such event driven sync can also be implemented for cloud services, but getting the file lists over the cloud takes a considerable amount of time causing the application to become inresponsive.
 	\end{itemize}
-	\item Authentication: There are 3 buttons provided in the GUI to authenticate each of Dropbox, GoogleDrive and SkyDrive repectively. On clicking those button instructions are showed to authenticate. The user needs to go to the link shown on any browser and get the auth token from there and provide it back in the GUI.
+	\item Authentication: There are 3 buttons provided in the GUI to authenticate each of Dropbox, GoogleDrive and SkyDrive repectively. On clicking those button, the user is authenticated using the stored authentication tokens. If the tokens are not found or have expired, instructions are given to the user to authenticate. The user is provided with a authentication link, which needs to be opened in the browser and the code returned in this process, works as an authentication token for the user.
 \end{enumerate}
 
 \section{Implementation}
+The complete implementation is done in python 2.7. {\em python-tkinter} is used for GUI. The API's of various services are taken from their developer websites.
 
+\begin{enumerate}
+\item A folder named "easyCloud" is created in the home folder of the user which is synced with folder of same name in the home directories of each of the linked accounts.
+\item If a file is not present in any of the cloud services, but is found in the local folder, it is uploaded to the cloud. The location is decided by the location algorithm.
+\item If a file is present in some cloud service but was not present in the local folder previously, it is downloaded to the local folder. This would happen when a user directly uploads the file in the cloud service (using web/other services).
+\item But if a file is present in some cloud and was also present in the local folder previously, it is deleted. This would happen when a user deletes a synced file from the "easyCloud" folder.
+\item {\bf Location Algorithm}: The user is presented with 5 choices, "Split", "All", "Only To Dropbox", "Only To skyDrive" and "Only To Google Drive". When any of the last four is selected, the file is uploaded accordingly to the selected choice. But if "Split" option is selected, the application checks which of the linked accounts has the highest (free space/total space) ratio and the file is uploaded in the corresponding account.
+\item {\bf Sync}: There are two sync options, in the first, the folders will automatically sync every 15 minutes, and the other is event driven, i.e., when a user uplaods or deletes a files from the local folder, the folders are synced. Apart from this, the user is also presented with a button in the GUI which would sync the folders. 
+\end{enumerate}
 
-Data Management
-Upload files
-Download files
-Allows the user to select a file from his system and upload it on the site.
-Download a file from cloud storage service which is already uploaded on the site.
-Software Requirements Specification for Centralized Cloud Storage
- Page 3
-Browse file list
-See the actual location of the file
-Save a particular file in a specific CSS.
-Browse the complete file list
-along with directory structure.
-Allows the user to see where the
-file is actually stored and links
-to the storage space.
-Allows user to select a specific
-cloud service to store a file.
+\section{Testing}
+The application has been extensively tested on various linux machines. Various combination of tasks like upload, download, delete using various sync settings have been tested.
+Some bugs and inconsistencies were found in the testing processs. These were corrected followed by a subsequent phase of testing.
 
+\section{Furthur Work}
+\begin{enumerate}
+\item Port the application to Windows and other operating systems.
+\item Include other services like box.net, copy.com, amazon cloud etc. 
+\item Develop and implemenet better algorithms for dividing files over various cloud services.
+\end{enumerate}
 
 \section{References}
-Dropbox: https://www.dropbox.com/developers \\
-Google Drive: https://developers.google.com/drive/ \\
-SkyDrive: http://msdn.microsoft.com/en-us/library/live/hh826521.aspx \\
+\begin{itemize}
+\item Dropbox: https://www.dropbox.com/developers
+\item Google Drive: https://developers.google.com/drive/ 
+\item SkyDrive: http://msdn.microsoft.com/en-us/library/live/hh826521.aspx 
+\item The project had been hosted on Github at https://github.com/pankajprateek/easyCloud
+\end{itemize}
 
 \end{document}
 
